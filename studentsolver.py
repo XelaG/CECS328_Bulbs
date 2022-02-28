@@ -1,4 +1,5 @@
 import collections
+from random import randint
 
 def find_m_min(bulbs):
     m_min = bulbs[0][0]
@@ -8,8 +9,8 @@ def find_m_min(bulbs):
         for j in i:
             if (j < 0):
                 j = j * -1
-                if j < m_min:
-                    m_min = j
+            if j < m_min:
+                m_min = j
     return m_min
 
 def find_m_max(bulbs):
@@ -20,8 +21,8 @@ def find_m_max(bulbs):
         for j in i:
             if (j < 0):
                 j = j * -1
-                if j > m_max:
-                    m_max = j
+            if j > m_max:
+                m_max = j
     return m_max
 
 def create_sets(bulbs, min, max):
@@ -61,6 +62,12 @@ def lit_row(sets, row):
                 item['is_row_lit'] = True
     return sets
 
+def is_any_row_not_lit(sets): 
+    for k, v in sets.items():
+        for item in v:
+            if not item['is_row_lit']: return True
+    return False
+
 def lit_them_up(sets):
     result = []
     for k, v in sets.items():
@@ -81,22 +88,51 @@ def lit_them_up(sets):
             for item in v:
                 if not item['is_red'] and not item['is_row_lit']:
                     sets = lit_row(sets, item['row_idx'])
-    print_sets(sets)
-    print(result)
+    # print_sets(sets)
+    # print("Are any row not lit ?", is_any_row_not_lit(sets))
+    # print("Result is: ", result)
+    # print("Result Length is: ", len(result))
     return result
 
 def solve(bulbs):
     m_min = find_m_min(bulbs)
     m_max = find_m_max(bulbs)
+    # print("m_min = ", m_min)
+    # print("m_max = ", m_max)
     n = len(bulbs)
     sets = create_sets(bulbs, m_min, m_max)
     # print_sets(sets)
 
     return lit_them_up(sets)
 
-def main():
-    bulbs = [[1, -2, 2], [1, 1, 1], [-5, -2, 1], [4, -3, 3]]
-    # bulbs = [[-4, -4, -1], [13, -9, -14], [4, -7, -2], [-2, 6, 3], [-6, -8, 11], [-4, -3 -6], [7, 11, -10], [4, -7, 6], [5, 6, 4], [10, 14, -9]]
-    solve(bulbs)
+# def generate_bulb(max, n):
+#     bulbs = []
+#     for i in range(1, n + 1):
+#         bulbs.append([randint(-max, max), randint(-max, max),randint(-max, max)])
+#     has_one = False
+#     has_max = False
+#     for i in range(len(bulbs)):
+#         for j in range(len(bulbs[i])):
+#             if (bulbs[i][j] == 1): 
+#                 has_one = True
+#             if (bulbs[i][j] == max): 
+#                 has_max = True
+#             if (bulbs[i][j] == 0):
+#                 while (bulbs[i][j] == 0):
+#                     bulbs[i][j] = randint(-max, max)
+#     if not has_one:
+#         print("Don't have a one")
+#         bulbs[0][0] = 1
+#     if not has_max:
+#         print("Don't have a max")
+#         bulbs[0][1] = max
+#     return bulbs
 
-main()
+# def main():
+    # bulbs = generate_bulb(50, 43)
+    # print(bulbs)
+    # bulbs = [[1, -2, 2], [1, 1, 1], [-5, -2, 1], [4, -3, 3]]
+    # bulbs = [[-4, -4, -1], [13, -9, -14], [4, -7, -2], [-2, 6, 3], [-6, -8, 11], [-4, -3 -6], [7, 11, -10], [4, -7, 6], [5, 6, 4], [10, 14, -9]]
+    # solve(bulbs)
+
+# main()
